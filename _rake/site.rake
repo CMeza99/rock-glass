@@ -54,10 +54,12 @@ namespace :site do
 
     # Make sure destination folder exists as git repo
     # check_destination
-    CONFIG["destination"] = "../deploy/#{REPO}"
+    CONFIG["destination"] = "_deploy"
 
     unless Dir.exist? CONFIG["destination"]
       sh "git clone https://#{ENV['GIT_NAME']}:#{ENV['GH_TOKEN']}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
+    else
+      abort ("Directory \'#{CONFIG["destination"]}\' exists!")
     end
 
     sh "git checkout #{SOURCE_BRANCH}"
@@ -65,6 +67,15 @@ namespace :site do
 
     # Generate the site
     sh "bundle exec jekyll build"
+
+    if CONFIG["nojekyll"]
+      Dir.chdir(CONFIG["destination"]) { sh "find . -maxdepth 1 -not -name .git -not -name . -exec rm -ir {} \;" }
+      Dir.chdir(CONFIG["destination"]) { sh "touch .nojekyll" }
+      Dir.chdir(CONFIG["destination"]) { sh "cp " }
+      sh "cp --recursive _/site #{CONFIG["destination"]}"
+    else
+      Dir.chdir(CONFIG["destination"]) { sh "git merge #{SOURCE_BRANCH}" }
+    end
 
     # Commit and push to github
     sha = `git log`.match(/[a-z0-9]{40}/)[0]
@@ -74,5 +85,7 @@ namespace :site do
       sh "git push --quiet origin #{DESTINATION_BRANCH}"
       puts "Pushed updated branch #{DESTINATION_BRANCH} to GitHub Pages"
     end
+
+    sh "rm -rf #{CONFIG["destination"]}"
   end
 end
