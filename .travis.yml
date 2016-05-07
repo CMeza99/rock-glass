@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 language: ruby
 rvm:
-  - 22
+  - 2.2
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -qq ruby2.0-dev
