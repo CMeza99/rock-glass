@@ -1,17 +1,4 @@
-# REPO = CONFIG["repo"] || "#{USERNAME}.github.io"
-REPO = `printf '%s\n' $(cd . && printf '%s\n' ${PWD##*/})`
 
-# Determine source and destination branch
-# User or organization: source -> master
-# Project: master -> gh-pages
-# Name of source branch for user/organization defaults to "source"
-if REPO == "#{USERNAME}.github.io"
-  SOURCE_BRANCH = CONFIG['branch'] || "source"
-  DESTINATION_BRANCH = "master"
-else
-  SOURCE_BRANCH = "master"
-  DESTINATION_BRANCH = "gh-pages"
-end
 
 namespace :site do
   desc "Generate the site"
@@ -44,19 +31,41 @@ namespace :site do
       sh "git config --global user.name '#{ENV['GIT_NAME']}'"
       sh "git config --global user.email '#{ENV['GIT_EMAIL']}'"
       sh "git config --global push.default simple"
-      USERNAME = `printf '%s\n' $(cd .. && printf '%s\n' ${PWD##*/})`
-      if REPO == "#{USERNAME}.github.io".downcase
-        SOURCE_BRANCH = CONFIG['branch'] || "source"
-        DESTINATION_BRANCH = "master"
-      else
-        SOURCE_BRANCH = "master"
-        DESTINATION_BRANCH = "gh-pages"
-      end
+      # USERNAME = `printf '%s' $(cd .. && printf '%s' ${PWD##*/})`
+      USERNAME = `printf '%s' $(echo $TRAVIS_REPO_SLUG | cut --fields=1 --delimiter='/')`
+      # REPO = `printf '%s' $(cd . && printf '%s\n' ${PWD##*/})`
+      REPO = `printf '%s' $(echo $TRAVIS_REPO_SLUG | cut --fields=2 --delimiter='/')`
+    else
+      USERNAME = CONFIG["username"] || ENV['GIT_NAME']
+      REPO = CONFIG["repo"] || "#{USERNAME}.github.io"
+    end
+
+    # Determine source and destination branch
+    # User or organization: source -> master
+    # Project: master -> gh-pages
+    # Name of source branch for user/organization defaults to "source"
+    if REPO == "#{USERNAME}.github.io".downcase
+      SOURCE_BRANCH = CONFIG['branch'] || "source"
+      DESTINATION_BRANCH = "master"
+    else
+      SOURCE_BRANCH = "master"
+      DESTINATION_BRANCH = "gh-pages"
     end
 
     # Make sure destination folder exists as git repo
     # check_destination
     CONFIG["destination"] = "../deploy/#{REPO}"
+
+    puts "=== === === === === ==="
+    puts "USERNAME = #{USERNAME}"
+    puts "REPO = #{REPO}"
+    puts "SOURCE_BRANCH = #{SOURCE_BRANCH}"
+    puts "DESTINATION_BRANCH = #{DESTINATION_BRANCH}"
+    puts "CONFIG[\"destination\"] = #{CONFIG["destination"]}"
+    CMD = "git clone https://#{ENV['GIT_NAME']}:#{ENV['GH_TOKEN']}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
+    puts "CMD = #{CMD}"
+    puts "git clone https://#{ENV['GIT_NAME']}:#{ENV['GH_TOKEN']}@github.com\/#{USERNAME}\/#{REPO}.git #{CONFIG["destination"]}"
+    puts "=== === === === === ==="
     unless Dir.exist? CONFIG["destination"]
       sh "git clone https://#{ENV['GIT_NAME']}:#{ENV['GH_TOKEN']}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
     end
