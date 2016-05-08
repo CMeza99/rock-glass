@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/CMeza99/rock-glass.svg?branch=master)](https://travis-ci.org/CMeza99/rock-glass)
 # Rock Glass
 A Jekyll theme using:
 * [normalize.css](https://necolas.github.io/normalize.css) v4.1.1
