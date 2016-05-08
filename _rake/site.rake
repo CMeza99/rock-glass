@@ -54,6 +54,7 @@ namespace :site do
     # check_destination
     CONFIG["destination"] = "_deploy"
 
+    # Creates git clone to update branch for publishing
     unless Dir.exist? CONFIG["destination"]
       unless ENV['GH_TOKEN'].to_s == ''
         sh "git clone https://${GIT_NAME}:${GH_TOKEN}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
@@ -65,6 +66,7 @@ namespace :site do
       abort ("Directory \'#{CONFIG["destination"]}\' exists!")
     end
 
+    # Set branch
     sh "git checkout #{SOURCE_BRANCH}"
     Dir.chdir(CONFIG["destination"]) { sh "git checkout #{DESTINATION_BRANCH}" }
 
@@ -72,6 +74,9 @@ namespace :site do
     sh "bundle exec jekyll build"
 
     if CONFIG["nojekyll"]
+      # Remove all files from destination, execpt the .git directory
+      # Then set Github not to process with Jekyll
+      # Copy new build to destination
       Dir.chdir(CONFIG["destination"]) { sh "find . -maxdepth 1 -not -name .git -not -name . -exec rm --recursive --force {} \\;" }
       Dir.chdir(CONFIG["destination"]) { sh "touch .nojekyll" }
       sh "cp --recursive _site/* #{CONFIG["destination"]}"
