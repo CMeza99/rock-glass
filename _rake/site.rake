@@ -56,7 +56,7 @@ namespace :site do
 
     unless Dir.exist? CONFIG["destination"]
       unless ENV['GH_TOKEN'].to_s == ''
-        sh "git clone https://#{ENV['GIT_NAME']}:#{ENV['GH_TOKEN']}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
+        sh "git clone https://${GIT_NAME}:${GH_TOKEN}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
       else
         # Expecting that ssh keys exsist
         sh "git clone git@github.com:#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
