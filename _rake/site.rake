@@ -1,5 +1,3 @@
-
-
 namespace :site do
   desc "Generate the site"
   task :build do
@@ -69,7 +67,7 @@ namespace :site do
     sh "bundle exec jekyll build"
 
     if CONFIG["nojekyll"]
-      Dir.chdir(CONFIG["destination"]) { sh "find . -maxdepth 1 -not -name .git -not -name . -exec rm -ir {} \;" }
+      Dir.chdir(CONFIG["destination"]) { sh "find . -maxdepth 1 -not -name .git -not -name . -exec rm -ir {} \\;" }
       Dir.chdir(CONFIG["destination"]) { sh "touch .nojekyll" }
       Dir.chdir(CONFIG["destination"]) { sh "cp " }
       sh "cp --recursive _/site #{CONFIG["destination"]}"
