@@ -50,3 +50,6 @@ incremental: false
 highlighter: rouge
 gist:
   noscript: false
+
+# Rakefile settings
+nojekyll: true
