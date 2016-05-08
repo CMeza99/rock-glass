@@ -2,16 +2,19 @@ sudo: required
 dist: trusty
 language: ruby
 rvm:
-  - 2.2
+- 2.2
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -qq ruby2.0-dev
-  - gem update --system
-  - gem install rake
-# install: 
+- openssl aes-256-cbc -K $encrypted_9607cfad96e0_key -iv $encrypted_9607cfad96e0_iv
+  -in git--rocks-glass.enc -out ~\/.ssh/git--rocks-glass -d
+- eval "$(ssh-agent -s)"
+- ssh-add ~/.ssh/git--rocks-glass
+- sudo apt-get -qq update
+- sudo apt-get install -qq ruby2.0-dev
+- gem update --system
+- gem install rake
 script:
-  - bundle exec jekyll doctor
-  - rake site:deploy --quiet
-env:
-  global:
-    secure: Z9ipmipr1R7V1rSty06PLUxbxzll0DqLPpbM/Dk1slAt6gI4MvwMlSedZt552U3Xc2BFW4tJjk5i/nJnnwWb21sDjvLE9iJBlezw7FBmSg9uw9y112lhHluV1bVtVnTka3eNPRtuvln8ZaGKOGUSAG09WaSsrQDUv20tvPQ//Wmggj6d5Pemf5ePrIkvaSoVKC7hAKF4OqRa+YvlpRVogx05o2+SJh0e4S828DI4r5ZrIGg4sEPYBMpBLsD68OcUbc9jPq2R76AprC5YL0yC6n+Is4iyguwmvfXvsazGdeCr2lF8Gc2o4oVl5sy0wUW1xXD/426Lo4d1bjTNZF/5PLvY6FTILb5CV1Bw1GfyFETmdl0VxgzOnrCgCbhywY3efkP3EdFdHinPeQaKcD/tIAMiKmh4Fp+f6p4AlvheQAxyKgIwF+hOOtJMj2cQeeMCdX4fj21rkitTa1hOcaYO7zgruB7HTA1QcbqVIMdG88bqiO8N6XWyzOgTBt4wcXQ62jXh4lwy0ieuEjyy86bjHkszuzN5T8VZvQycpDasGiFOUSYSsIhCSej/25JL0Ym+Vp+QLlg+4xnuKg2BZwm5Ulq1QINhpNKRcDMqsr0ks0321PZrf24EJIIdq8VOUowITuL+3Hm4AP1stjCuQ2XClaJVJva8UcbKv9qlKP8oQyI=
+- bundle exec jekyll doctor
+- rake site:deploy --quiet
+# env:
+#   global:
+#     secure: Z9ipmipr1R7V1rSty06PLUxbxzll0DqLPpbM/Dk1slAt6gI4MvwMlSedZt552U3Xc2BFW4tJjk5i/nJnnwWb21sDjvLE9iJBlezw7FBmSg9uw9y112lhHluV1bVtVnTka3eNPRtuvln8ZaGKOGUSAG09WaSsrQDUv20tvPQ//Wmggj6d5Pemf5ePrIkvaSoVKC7hAKF4OqRa+YvlpRVogx05o2+SJh0e4S828DI4r5ZrIGg4sEPYBMpBLsD68OcUbc9jPq2R76AprC5YL0yC6n+Is4iyguwmvfXvsazGdeCr2lF8Gc2o4oVl5sy0wUW1xXD/426Lo4d1bjTNZF/5PLvY6FTILb5CV1Bw1GfyFETmdl0VxgzOnrCgCbhywY3efkP3EdFdHinPeQaKcD/tIAMiKmh4Fp+f6p4AlvheQAxyKgIwF+hOOtJMj2cQeeMCdX4fj21rkitTa1hOcaYO7zgruB7HTA1QcbqVIMdG88bqiO8N6XWyzOgTBt4wcXQ62jXh4lwy0ieuEjyy86bjHkszuzN5T8VZvQycpDasGiFOUSYSsIhCSej/25JL0Ym+Vp+QLlg+4xnuKg2BZwm5Ulq1QINhpNKRcDMqsr0ks0321PZrf24EJIIdq8VOUowITuL+3Hm4AP1stjCuQ2XClaJVJva8UcbKv9qlKP8oQyI=
