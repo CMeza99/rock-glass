@@ -34,8 +34,8 @@ namespace :site do
       # REPO = `printf '%s' $(cd . && printf '%s\n' ${PWD##*/})`
       REPO = `printf '%s' $(echo $TRAVIS_REPO_SLUG | cut --fields=2 --delimiter='/')`
     else
-      USERNAME = CONFIG["username"] || ENV['GIT_NAME']
-      REPO = CONFIG["repo"] || "#{USERNAME}.github.io"
+      USERNAME = CONFIG["username"] || `printf '%s' $(cat .git/config | grep -e "url = " | cut --fields=2 --delimiter=: | cut --field=1 --delimiter=/)`
+      REPO = CONFIG["repo"] || `printf '%s' $(cd . && printf '%s\n' ${PWD##*/})`
     end
 
     # Determine source and destination branch
@@ -55,7 +55,12 @@ namespace :site do
     CONFIG["destination"] = "_deploy"
 
     unless Dir.exist? CONFIG["destination"]
-      sh "git clone https://#{ENV['GIT_NAME']}:#{ENV['GH_TOKEN']}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
+      unless ENV['GH_TOKEN'].to_s == ''
+        sh "git clone https://#{ENV['GIT_NAME']}:#{ENV['GH_TOKEN']}@github.com/#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
+      else
+        # Expecting that ssh keys exsist
+        sh "git clone git@github.com:#{USERNAME}/#{REPO}.git #{CONFIG["destination"]}"
+      end
     else
       abort ("Directory \'#{CONFIG["destination"]}\' exists!")
     end
@@ -69,8 +74,7 @@ namespace :site do
     if CONFIG["nojekyll"]
       Dir.chdir(CONFIG["destination"]) { sh "find . -maxdepth 1 -not -name .git -not -name . -exec rm --recursive --force {} \\;" }
       Dir.chdir(CONFIG["destination"]) { sh "touch .nojekyll" }
-      Dir.chdir(CONFIG["destination"]) { sh "cp " }
-      sh "cp --recursive _/site #{CONFIG["destination"]}"
+      sh "cp --recursive _site/* #{CONFIG["destination"]}"
     else
       Dir.chdir(CONFIG["destination"]) { sh "git merge #{SOURCE_BRANCH}" }
     end

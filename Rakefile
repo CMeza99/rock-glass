@@ -5,7 +5,6 @@ require 'date'
 require 'yaml'
 
 CONFIG = YAML.load(File.read('_config.yml'))
-USERNAME = CONFIG["username"] || ENV['GIT_NAME']
 
 # Default task
 task :default => ['site:watch']
