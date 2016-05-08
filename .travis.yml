@@ -6,7 +6,7 @@ rvm:
 before_install:
   - mkdir --parents ~/.ssh
   - openssl aes-256-cbc -K $encrypted_9607cfad96e0_key -iv $encrypted_9607cfad96e0_iv
-    -in git--rocks-glass.enc -out ~\/.ssh/git--rocks-glass -d
+    -in git--rocks-glass.enc -out ~/.ssh/git--rocks-glass -d
   - eval "$(ssh-agent -s)"
   - ssh-add ~/.ssh/git--rocks-glass
   - sudo apt-get -qq update
