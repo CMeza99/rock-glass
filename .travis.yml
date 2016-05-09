@@ -1,9 +1,9 @@
-addons:
-  apt:
-    packages:
-      - ruby2.0-dev
+# addons:
+#   apt:
+#     packages:
+#       - ruby2.0-dev
 # sudo: required
-dist: trusty
+# dist: trusty
 language: ruby
 rvm:
   - 2.2
