@@ -9,11 +9,13 @@ CONFIG = YAML.load(File.read('_config.yml'))
 # Default task
 task :default => ['site:watch']
 
-desc "Display usage"
-task :help do
+task :help => ['usage']
+
+desc "Display usage syntax"
+task :usage do
   puts " $ rake create:post title=\"Post Title\" [date=\"YYYY-MM-DD\"] [tags=[tag1, tag2]] [category=\"category\"]"
   puts " $ rake create:page [title=\"Page Title\"] [folder=\"directory\"]"
-  puts " $ rake watch"
+  puts " $ rake site:watch"
 end
 
 # Load rake scripts
