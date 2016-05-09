@@ -1,4 +1,8 @@
-sudo: required
+addons:
+  apt:
+    packages:
+      - ruby2.0-dev
+# sudo: required
 dist: trusty
 language: ruby
 rvm:
@@ -10,8 +14,8 @@ before_install:
   - chmod 400 ~/.ssh/git--rocks-glass
   - eval "$(ssh-agent -s)"
   - ssh-add ~/.ssh/git--rocks-glass
-  - sudo apt-get -qq update
-  - sudo apt-get install -qq ruby2.0-dev
+#  - sudo apt-get -qq update
+#  - sudo apt-get install -qq ruby2.0-dev
   - gem update --system
   - gem install rake
 script:
